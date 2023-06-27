@@ -1,0 +1,25 @@
+version: '3.4'
+services:
+  ## Main app server
+  yarn:
+    build:
+      context: .
+      target: dev
+    command: yarn
+    volumes:
+      - ./:/opt/next-app/
+      - node_modules:/opt/next-app/node_modules
+  app:
+    build:
+      context: .
+      target: dev
+    depends_on:
+      yarn:
+        condition: service_completed_successfully
+    ports:
+      - 3001:3000
+    volumes:
+      - ./:/opt/next-app/
+      - node_modules:/opt/next-app/node_modules
+volumes:
+  node_modules:
